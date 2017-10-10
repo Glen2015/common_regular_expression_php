@@ -1,0 +1,29 @@
+//mobile phone number:
+$rule = "/1[34578]\d{9}/";
+//ID :
+$rule = "/(\d{18}|\d{17}(\d|X|x)|\d{15})/";
+//telephone:
+$rule = '/(010|02\d{1}|0[3-9]\d{2}|0[3-9]\d{3})-\d{7,9}/';
+//address(should start with city name):
+private function blockAddress($temp){
+        if(strpos($temp,"市") !== false){
+            $pos1 = strpos($temp, "市")-12;
+            $oneStep = 3;
+            $add_arr = ["市","县","区","街","道","路","小区","乡","镇","村","号"];
+            foreach ($add_arr as $key => $value) {
+                if (strpos($temp, $value) === false) {
+                    continue;
+                }
+                $pos2 = strpos($temp, $value);
+                $temp = substr_replace($temp, "****", $pos1+$oneStep, $pos2-$pos1-$oneStep);
+                if ($value == "小区") {
+                    $oneStep = 6;
+                }else{
+                    $oneStep = 3;
+                }
+                $pos1 = strpos($temp, $value);
+            }
+        }
+        return $temp;
+
+    }
